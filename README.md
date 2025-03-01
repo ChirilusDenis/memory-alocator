@@ -87,8 +87,6 @@ struct block_meta {
 _Note_: Both the `struct block_meta` and the **payload** of a block are aligned to **8 bytes**.
 
 
-![memory-block](./img/memory-block.svg
-
 #### Split Block
 
 Reusing memory blocks improves the allocator's performance, but might lead to [Internal Memory Fragmentation]
@@ -96,8 +94,6 @@ This happens when we allocate a size smaller than all available free blocks.
 If we use one larger block the remaining size of that block will be wasted since it cannot be used for another allocation.
 
 To avoid this, a block is be truncated to the required size and the remaining bytes will be used to create a new free block.
-
-![Split Block](./img/split-block.svg)
 
 All the resulting free block are reusable.
 The split is not performed if the remaining size (after reserving space for `block_meta` structure and payload) is not big enough to fit another block (`block_meta` structure and at least **1 byte** of usable memory).
@@ -108,8 +104,6 @@ There are cases when there is enough free memory for an allocation, but it is sp
 This is called [External Memory Fragmentation].
 
 One technique to reduce external memory fragmentation is **block coalescing** which implies merging adjacent free blocks to form a contiguous chunk.
-
-![Coalesce Block Image](./img/coalesce-blocks.svg)
 
 Coalescing is used before searching for a block and in `os_realloc()` to expand the current block when possible.
 
