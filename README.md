@@ -171,64 +171,6 @@ To run only the checker, use the `run_tests.py` script from the `tests/` directo
 Before running `run_tests.py`, you first have to build `libosmem.so` in the `src/` directory and generate the test binaries in `tests/snippets`.
 You can do so using the all-in-one `Makefile` rule from `tests/`: `make check`.
 
-```console
-student@os:~/.../mem-alloc$ cd tests/
-student@os:~/.../mem-alloc/tests$ make check
-gcc -fPIC -Wall -Wextra -g -I../utils  -c -o osmem.o osmem.c
-gcc -fPIC -Wall -Wextra -g -I../utils  -c -o helpers.o helpers.c
-gcc -fPIC -Wall -Wextra -g -I../utils  -c -o ../utils/printf.o ../utils/printf.c
-[...]
-gcc -I../utils -fPIC -Wall -Wextra -g -o snippets/test-all snippets/test-all.c -L../src -losmem
-gcc -I../utils -fPIC -Wall -Wextra -g -o snippets/test-calloc-arrays snippets/test-calloc-arrays.c -L../src -losmem
-gcc -I../utils -fPIC -Wall -Wextra -g -o snippets/test-calloc-block-reuse snippets/test-calloc-block-reuse.c -L../src -losmem
-gcc -I../utils -fPIC -Wall -Wextra -g -o snippets/test-calloc-coalesce-big snippets/test-calloc-coalesce-big.c -L../src -losmem
-gcc -I../utils -fPIC -Wall -Wextra -g -o snippets/test-calloc-coalesce snippets/test-calloc-coalesce.c -L../src -losmem
-gcc -I../utils -fPIC -Wall -Wextra -g -o snippets/test-calloc-expand-block snippets/test-calloc-expand-block.c -L../src -losmem
-[...]
-test-malloc-no-preallocate       ........................ passed ...   2
-test-malloc-preallocate          ........................ passed ...   3
-test-malloc-arrays               ........................ passed ...   5
-test-malloc-block-reuse          ........................ passed ...   3
-test-malloc-expand-block         ........................ passed ...   2
-test-malloc-no-split             ........................ passed ...   2
-test-malloc-split-one-block      ........................ passed ...   3
-test-malloc-split-first          ........................ passed ...   2
-test-malloc-split-last           ........................ passed ...   2
-test-malloc-split-middle         ........................ passed ...   3
-test-malloc-split-vector         ........................ passed ...   2
-test-malloc-coalesce             ........................ passed ...   3
-test-malloc-coalesce-big         ........................ passed ...   3
-test-calloc-no-preallocate       ........................ passed ...   1
-test-calloc-preallocate          ........................ passed ...   1
-test-calloc-arrays               ........................ passed ...   5
-test-calloc-block-reuse          ........................ passed ...   1
-test-calloc-expand-block         ........................ passed ...   1
-test-calloc-no-split             ........................ passed ...   1
-test-calloc-split-one-block      ........................ passed ...   1
-test-calloc-split-first          ........................ passed ...   1
-test-calloc-split-last           ........................ passed ...   1
-test-calloc-split-middle         ........................ passed ...   1
-test-calloc-split-vector         ........................ passed ...   2
-test-calloc-coalesce             ........................ passed ...   2
-test-calloc-coalesce-big         ........................ passed ...   2
-test-realloc-no-preallocate      ........................ passed ...   1
-test-realloc-preallocate         ........................ passed ...   1
-test-realloc-arrays              ........................ passed ...   3
-test-realloc-block-reuse         ........................ passed ...   3
-test-realloc-expand-block        ........................ passed ...   2
-test-realloc-no-split            ........................ passed ...   3
-test-realloc-split-one-block     ........................ passed ...   3
-test-realloc-split-first         ........................ passed ...   3
-test-realloc-split-last          ........................ passed ...   3
-test-realloc-split-middle        ........................ passed ...   2
-test-realloc-split-vector        ........................ passed ...   2
-test-realloc-coalesce            ........................ passed ...   3
-test-realloc-coalesce-big        ........................ passed ...   1
-test-all                         ........................ passed ...   5
-
-Total:                                                            90/100
-```
-
 **NOTE:** By default, `run_tests.py` checks for memory leaks, which can be time-consuming.
 To speed up testing, use the `-d` flag or `make check-fast` to skip memory leak checks.
 
@@ -248,27 +190,6 @@ cd .. && cpplint --recursive src/ tests/ checker/
 cd .. && shellcheck checker/*.sh tests/*.sh
 ```
 
-### Debugging
-
-`run_tests.py` uses `ltrace` to capture all the libcalls and syscalls performed.
-
-The output of `ltrace` is formatted to show only top level library calls and nested system calls.
-For consistency, the heap start and addresses returned by `mmap()` are replaced with labels.
-Every other address is displayed as `<label> + offset`, where the label is the closest mapped address.
-
-`run_tests.py` supports three modes:
-
-- verbose (`-v`), prints the output of the test
-- diff (`-d`), prints the diff between the output and the ref
-- memcheck (`-m`), prints the diff between the output and the ref and announces memory leaks
-
-If you want to run a single test, you give its name or its path as arguments to `run_tests.py`:
-
-```console
-student@os:~/.../mem-alloc/tests$ python3 run_tests.py test-all
-OR
-student@os:~/.../mem-alloc/tests$ python3 run_tests.py snippets/test-all
-```
 ## Resources
 
 - ["Implementing malloc" slides by Michael Saelee](https://moss.cs.iit.edu/cs351/slides/slides-malloc.pdf)
