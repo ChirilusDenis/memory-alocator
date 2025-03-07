@@ -189,8 +189,3 @@ cd .. && cpplint --recursive src/ tests/ checker/
 [...]
 cd .. && shellcheck checker/*.sh tests/*.sh
 ```
-
-## Resources
-
-- ["Implementing malloc" slides by Michael Saelee](https://moss.cs.iit.edu/cs351/slides/slides-malloc.pdf)
-- [Malloc Tutorial](https://danluu.com/malloc-tutorial/)
